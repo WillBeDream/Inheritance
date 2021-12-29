@@ -240,37 +240,8 @@ int main()
 
 	Graduate P("Pinkman", "Jessie", 25, "Chemistry", "WW_123", 85, 95, "OVR", 10);
 	P.print();
-//
-//Graduate T("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 93, "OBR", 10);
-//T.print();
-//
-//	Teacher T("Pinkman", "Jessie", 22, "math", 5);
-//	T.print();
 #endif // INHERITANCE
-
-	//Human* group[] =
-	//{
-	//	new Student("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 93),
-	//	new Student("Versetti", "Thomas", 30, "Criminal", "Vice", 90),
-	//	new Teacher("White", "Walter", 50, "Chemistry", 25),
-	//	new Student("Diaz", "Ricardo", 55, "Weapons distribution", "Vice", 80),
-	//	new Graduate("Schrader", "Hank", 42,
-	//	"Cryminalistic", "OBN", 95,	"How to catch Heisenberg", 10),
-	//	new Teacher("Eistein", "Albert", 143, "Astronomy", 120)
-	//};
-
-	//for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
-	//{
-	//	cout << "\n----------------------------------------\n";
-	//	//group[i]->print();
-	//	group[i]->print();
-	//}
-	//cout << "\n----------------------------------------\n";
-
-	//for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
-	//{
-	//	delete[] group[i];
-	//}
+	
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
