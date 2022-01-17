@@ -88,6 +88,18 @@ public:
 		set_age(age);
 		return is;
 	}
+	virtual std::ofstream& print(std::ofstream& os)const
+	{
+		/*return os << last_name << " " << first_name << " " << age << " лет";*/
+		os << std::left;
+		os.width(10);
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(3);
+		os << age;
+		return os;
+	}
 
 };
 
@@ -95,6 +107,12 @@ std::ostream& operator<<(std::ostream& os, const Human& obj)
 {
 	return obj.print(os);
 }
+
+std::ofstream& operator<<(std::ofstream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+
 
 std::istream& operator>>(std::istream& is, Human& obj)
 {
@@ -138,6 +156,7 @@ public:
 	std::ostream& print(std::ostream& os)const
 	{
 		Human::print(os)<<" ";
+		os.width(10);
 		return os << position;
 	}
 
@@ -145,6 +164,14 @@ public:
 	{
 		Human::input(is);
 		return is >> position;
+	}
+
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Human::print(os) << " ";
+		os.width(10);
+		os << position;
+		return os;
 	}
 
 };
@@ -191,6 +218,12 @@ public:
 	{
 		Employee::input(is);
 		return is >> salary;
+	}
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Employee::print(os) << " ";
+		os << salary;
+		return os;
 	}
 };
 
@@ -240,7 +273,25 @@ public:
 	std::ostream& print(std::ostream& os)const
 	{
 		Employee::print(os)<<" ";
-		return os << "тариф: " << rate << "отработано: " << hours<<"итого:"<<get_salary() << endl;
+
+		os << "тариф: ";
+		os.width(5);
+		os << std::right;
+		os << rate;
+		os << " отработано: ";
+		os.width(3);
+		os << hours << " итого:" << get_salary();
+		return os;
+	}
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Employee::print(os) << " ";
+		os.width(5);
+		os << std::right;
+		os << rate;
+		os.width(3);
+		os << hours;
+		return os;
 	}
 };
 
@@ -249,7 +300,7 @@ public:
 int main()
 {
     setlocale(LC_ALL, "");
-	/*Employee* department[] =
+	Employee* department[] =
 	{
 		new PermanentEmployee("Rosenberg","Ken",30, "Lawyer", 2000),
 		new PermanentEmployee("Diaz", "Ricardo", 50, "Boss", 50000),
@@ -262,28 +313,29 @@ int main()
 		cout<<*department[i];
 
 		cout << "\n--------------------------------------\n";
-	}*/
+	}
 
-	/*std::ofstream fout("myfile3.txt");
+	std::ofstream fout("myfile3.txt");
 	for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
 	{
 		fout.width(25);
 		fout << std::left; 
-		fout <<std::string(typeid(*department[i]).name()) +  ":" << *department[i] << endl;
+		fout << std::string(typeid(*department[i]).name()) + ":";
+		fout << *department[i] << endl;
 	}
 	fout.close();
-	system("start notepad myfile3.txt");*/
+	system("start notepad myfile3.txt");
 
-	//cout << total_salary << endl;
-	/*for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
+	cout << total_salary << endl;
+	for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
 	{
 		delete department[i];
-	}*/
+	}
 
-	PermanentEmployee pe;
+	/*PermanentEmployee pe;
 	cout << "Введите информацию о сотруднике: "<< endl;
 	cin >> pe;
-	cout << pe << endl;
+	cout << pe << endl;*/
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
