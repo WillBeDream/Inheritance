@@ -286,7 +286,7 @@ public:
 	std::ofstream& print(std::ofstream& os)const
 	{
 		Employee::print(os) << " ";
-		os.width(5);
+		os.width(10);
 		os << std::right;
 		os << rate;
 		os.width(3);
@@ -295,11 +295,12 @@ public:
 	}
 };
 
-
+//#define SAVE_TO_FILE
 
 int main()
 {
     setlocale(LC_ALL, "");
+#ifdef SAVE_TO_FILE
 	Employee* department[] =
 	{
 		new PermanentEmployee("Rosenberg","Ken",30, "Lawyer", 2000),
@@ -308,9 +309,9 @@ int main()
 	};
 
 	double total_salary = 0;
-	for (size_t i = 0; i < sizeof(department)/sizeof(Employee*); i++)
+	for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
 	{
-		cout<<*department[i];
+		cout << *department[i];
 
 		cout << "\n--------------------------------------\n";
 	}
@@ -319,7 +320,7 @@ int main()
 	for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
 	{
 		fout.width(25);
-		fout << std::left; 
+		fout << std::left;
 		fout << std::string(typeid(*department[i]).name()) + ":";
 		fout << *department[i] << endl;
 	}
@@ -336,6 +337,8 @@ int main()
 	cout << "¬ведите информацию о сотруднике: "<< endl;
 	cin >> pe;
 	cout << pe << endl;*/
+#endif // DEBUG
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
