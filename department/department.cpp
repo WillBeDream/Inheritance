@@ -48,7 +48,12 @@ public:
 	{
 		this->age = age;
 	}
-
+	Human()
+	{
+		set_last_name("Ivan");
+		set_first_name("Ivanov");
+		set_age(18);
+	}
 	Human(human_take_parameters)
 	{
 		set_last_name(last_name);
@@ -60,12 +65,41 @@ public:
 	{
 		cout << "Destruction\t" << this << endl;
 	}
-	virtual void print()const
+	virtual std::ostream& print(std::ostream& os)const
 	{
-		cout << last_name << " " << first_name << " " << age << " лет" << endl;
+		/*return os << last_name << " " << first_name << " " << age << " лет";*/
+		os << std::left;
+		os.width(10);
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(3);
+		os << age << " лет";
+		return os;
+	}
+	virtual std::istream& input(std::istream& is)
+	{
+		std::string last_name;
+		std::string first_name;
+		unsigned int age;
+		is >> last_name >> first_name >> age;
+		set_first_name(first_name);
+		set_last_name(last_name);
+		set_age(age);
+		return is;
 	}
 
 };
+
+std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+
+std::istream& operator>>(std::istream& is, Human& obj)
+{
+	return obj.input(is);
+}
 
 #define employee_take_parameters const std::string& position
 #define employee_give_parameters position
@@ -87,6 +121,10 @@ public:
 	{
 
 	}
+	Employee():Human()
+	{
+		set_position("student");
+	}
 	Employee(human_take_parameters, employee_take_parameters):Human(human_give_parameters)
 	{
 		set_position(position);
@@ -97,11 +135,18 @@ public:
 		cout << "EDestructor:\t" << this << endl;
 	}
 
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		cout << position << endl;
+		Human::print(os)<<" ";
+		return os << position;
 	}
+
+	std::istream& input(std::istream& is)
+	{
+		Human::input(is);
+		return is >> position;
+	}
+
 };
 
 #define permanent_employee_take_parameters double salary
@@ -119,6 +164,10 @@ public:
 	{
 		this->salary = salary;
 	}
+	PermanentEmployee() :Employee()
+	{
+		set_salary(1000);
+	}
 	PermanentEmployee
 	(	human_take_parameters,
 		employee_take_parameters, 
@@ -132,10 +181,16 @@ public:
 	{
 		cout << "PEDestructor:\t" << this << endl;
 	}
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Employee::print();
-		cout << salary << endl;
+		Employee::print(os) << " ";
+		return os << salary;
+	}
+
+	std::istream& input(std::istream& is)
+	{
+		Employee::input(is);
+		return is >> salary;
 	}
 };
 
@@ -182,17 +237,19 @@ public:
 	{
 		cout << "HEDestructor:\t" << this << endl;
 	}
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Employee::print();
-		cout << "тариф: " << rate << "отработано: " << hours<<"итого:"<<get_salary() << endl;
+		Employee::print(os)<<" ";
+		return os << "тариф: " << rate << "отработано: " << hours<<"итого:"<<get_salary() << endl;
 	}
 };
+
+
 
 int main()
 {
     setlocale(LC_ALL, "");
-	Employee* department[] =
+	/*Employee* department[] =
 	{
 		new PermanentEmployee("Rosenberg","Ken",30, "Lawyer", 2000),
 		new PermanentEmployee("Diaz", "Ricardo", 50, "Boss", 50000),
@@ -202,30 +259,31 @@ int main()
 	double total_salary = 0;
 	for (size_t i = 0; i < sizeof(department)/sizeof(Employee*); i++)
 	{
-		department[i]->print();
-		total_salary += department[i]->get_salary();
+		cout<<*department[i];
+
 		cout << "\n--------------------------------------\n";
-	}
+	}*/
 
-	std::ofstream file("myfile1.txt");
-	if (file.is_open())
-	
-	if (file.is_open())
-	{
-		for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
-		{
-			file << department[i]->get_salary()<<endl;
-		}
-		
-	}
-
-	file.close();
-
-	cout << total_salary << endl;
+	/*std::ofstream fout("myfile3.txt");
 	for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
 	{
-		delete department[i];
+		fout.width(25);
+		fout << std::left; 
+		fout <<std::string(typeid(*department[i]).name()) +  ":" << *department[i] << endl;
 	}
+	fout.close();
+	system("start notepad myfile3.txt");*/
+
+	//cout << total_salary << endl;
+	/*for (size_t i = 0; i < sizeof(department) / sizeof(Employee*); i++)
+	{
+		delete department[i];
+	}*/
+
+	PermanentEmployee pe;
+	cout << "Введите информацию о сотруднике: "<< endl;
+	cin >> pe;
+	cout << pe << endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
