@@ -1,0 +1,6 @@
+class Student:Pinkman   Jessie    22   Chemistry      WW_01     93 10 
+class Student:Versetti  Thomas    30   Criminal       Vice      90 9  
+class Teacher:White     Walter    50   Chemistry 25        
+class Student:Diaz      Ricardo   55   Weapons        Vice      80 5  
+class Graduate:Schrader  Hank      42   Cryminalistic  OBN       95 5   some topic5
+class Teacher:Eistein   Albert    143  Astronomy 120       

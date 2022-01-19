@@ -100,7 +100,11 @@ public:
 		os << age;
 		return os;
 	}
-
+	virtual std::ifstream& scan(std::ifstream& is)
+	{
+		is >> last_name >> first_name >> age;
+		return is;
+	}
 };
 
 std::ostream& operator<<(std::ostream& os, const Human& obj)
@@ -113,6 +117,10 @@ std::ofstream& operator<<(std::ofstream& os, const Human& obj)
 	return obj.print(os);
 }
 
+std::ifstream& operator>>(std::ifstream& is, Human& obj)
+{
+	return obj.scan(is);
+}
 
 std::istream& operator>>(std::istream& is, Human& obj)
 {
@@ -173,7 +181,12 @@ public:
 		os << position;
 		return os;
 	}
-
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Human::scan(is);
+		is >> position;
+		return is;
+	}
 };
 
 #define permanent_employee_take_parameters double salary
@@ -224,6 +237,12 @@ public:
 		Employee::print(os) << " ";
 		os << salary;
 		return os;
+	}
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Employee::scan(is);
+		is >> salary;
+		return is;
 	}
 };
 
@@ -293,13 +312,25 @@ public:
 		os << hours;
 		return os;
 	}
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Employee::scan(is);
+		is >> rate >> hours;
+		return is;
+	}
 };
+
+Employee* EmployeeFactory(std::string& type)
+{
+	if (type.find("PermanentEmployee") != std::string::npos)return new PermanentEmployee("", "", 0, "", 0);
+	if (type.find("HourlyEmployee") != std::string::npos)return new HourlyEmployee("", "", 0, "", 0, 0);
+}
 
 //#define SAVE_TO_FILE
 
 int main()
 {
-    setlocale(LC_ALL, "");
+	setlocale(LC_ALL, "");
 #ifdef SAVE_TO_FILE
 	Employee* department[] =
 	{
@@ -338,6 +369,52 @@ int main()
 	cin >> pe;
 	cout << pe << endl;*/
 #endif // DEBUG
+
+	Employee** department = nullptr;
+	int n = 0;
+	std::ifstream fin("myfile3.txt");
+
+	if (fin.is_open())
+	{
+		/*cout << fin.tellg() << endl;*/
+		std::string employee_type;
+		
+		for (; !fin.eof(); n++)
+		{
+			std::getline(fin, employee_type);
+		}
+		n--;
+		cout << n << endl;
+		department = new Employee*[n] {};
+
+		cout << fin.tellg() << endl;
+		fin.clear();
+		fin.seekg(0);
+		cout << fin.tellg() << endl;
+
+		for (size_t i = 0; i < n; i++)
+		{
+			std::getline(fin, employee_type, ':');
+			department[i] = EmployeeFactory(employee_type);
+			fin >> *department[i];
+		}
+	}
+	else
+	{
+		std::cerr << "Error: file not found"<<endl;
+	}
+
+	for (size_t i = 0; i < n; i++)
+	{
+		cout << *department[i]<<endl;
+	}
+	for (size_t i = 0; i < n; i++)
+	{
+		delete department[i];
+	}
+
+	delete[]department;
+	fin.close();
 
 }
 

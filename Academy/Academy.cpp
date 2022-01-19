@@ -65,7 +65,53 @@ public:
 		cout << last_name<<" " <<first_name << " " << age << " лет" << endl;
 	}
 
+	virtual std::ostream& print(std::ostream& os)const
+	{
+		/*return os << last_name << " " << first_name << " " << age << " лет";*/
+		os << std::left;
+		os.width(10);
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(3);
+		os << age << " лет";
+		return os;
+	}
+
+	virtual std::ofstream& print(std::ofstream& os)const 
+	{
+		os << std::left;
+		os.width(10);
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(5);
+		os << age;
+		return os;
+	}
+
+	virtual std::ifstream& scan(std::ifstream& is)
+	{
+		is >> last_name >> first_name >> age;
+		return is;
+	}
 };
+
+std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+
+std::ofstream& operator<<(std::ofstream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+
+
+std::ifstream& operator>>(std::ifstream& is, Human& obj)
+{
+	return obj.scan(is);
+}
 
 #define students_take_parameters const std::string& speciality, const std::string& group, double rating,double attendance
 #define students_give_parameters speciality, group, rating, attendance
@@ -130,6 +176,46 @@ public:
 		cout << speciality << " " << group << " " << rating << " " << attendance << endl;
 	}
 	
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Human::print(os);
+		os << std::left;
+		os.width(15);
+		os<< speciality;
+		os.width(10);
+		os<<group;
+		os.width(3);
+		os<<rating;
+		os.width(3);
+		os<< attendance;
+		return os;
+	}
+
+	std::ostream& print(std::ostream& os)const
+	{
+		Human::print(os);
+		Human::print(os);
+		os << std::left;
+		os.width(15);
+		os << speciality;
+		os.width(10);
+		os << group;
+		os.width(3);
+		os << rating;
+		os.width(3);
+		os << attendance;
+		return os;
+	}
+
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Human::scan(is);
+		is>> speciality;
+		is>> group;
+		is>>rating;
+		is>>attendance;
+		return is;
+	}
 };
 
 #define teacher_take_parameters const std::string& subject, int expirience
@@ -177,7 +263,33 @@ public:
 		cout << expirience << endl;
 		cout << subject << endl;
 	}
-
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Human::print(os);
+		os << std::left;
+		os.width(10);
+		os << subject;
+		os.width(10);
+		os << expirience;
+		return os;
+	}
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Human::scan(is);
+		is >> subject;
+		is >> expirience;
+		return is;
+	}
+	std::ostream& print(std::ostream& os)const
+	{
+		Human::print(os);
+		os << std::left;
+		os.width(10);
+		os << subject;
+		os.width(10);
+		os << expirience;
+		return os;
+	}
 };
 
 
@@ -230,7 +342,40 @@ public:
 		cout << topic << endl;
 		cout << result << endl;
 	}
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Student::print(os);
+		os << std::left;
+		os.width(10);
+		os<< topic;
+		os<< result;
+		return os;
+	}
+
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Student::scan(is);
+		is >> topic;
+		is >> result;
+		return is;
+	}
+	std::ostream& print(std::ostream& os)const
+	{
+		Student::print(os);
+		os << std::left;
+		os.width(10);
+		os << topic;
+		os << result;
+		return os;
+	}
 };
+
+Human* HumanFactory(std::string& type)
+{
+	if (type.find("Student") != std::string::npos)return new Student("", "", 0, "","", 0, 0);
+	if (type.find("Teacher") != std::string::npos)return new Teacher("", "", 0, "", 0);
+	if (type.find("Graduate") != std::string::npos)return new Graduate("", "", 0, "","", 0, 0,"", 0);
+}
 
 //#define INHERITANCE
 
@@ -258,25 +403,67 @@ T.print();
 		new Student("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 93,10),
 		new Student("Versetti", "Thomas", 30, "Criminal", "Vice", 90, 9),
 		new Teacher("White", "Walter", 50, "Chemistry", 25),
-		new Student("Diaz", "Ricardo", 55, "Weapons distribution", "Vice", 80, 5),
+		new Student("Diaz", "Ricardo", 55, "Weapons", "Vice", 80, 5),
 		new Graduate("Schrader", "Hank", 42,
 		"Cryminalistic", "OBN", 95 ,5," some topic", 5 ),
 		new Teacher("Eistein", "Albert", 143, "Astronomy", 120)
 	};
 
-	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	//for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	//{
+	//	cout << "\n----------------------------------------\n";
+	//	//group[i]->print();
+	//	cout << typeid(*group[i]).name() << endl;
+	//	group[i]->print();
+	//}
+	//cout << "\n----------------------------------------\n";
+
+	/*std::ofstream fout("file1.txt");
+	for (size_t i = 0; i < sizeof(group)/sizeof(Human*); i++)
 	{
-		cout << "\n----------------------------------------\n";
-		//group[i]->print();
-		cout << typeid(*group[i]).name() << endl;
-		group[i]->print();
+		fout << std::string(typeid(*group[i]).name()) + ":";
+		fout << *group[i]<<endl;
 	}
-	cout << "\n----------------------------------------\n";
+	system("start notepad file1.txt");
+	fout.close();*/
+
+	Human** groups = nullptr;
+	int n = 0;
+	std::ifstream fin("file1.txt");
+	if (fin.is_open())
+	{
+		std::string employee_type;
+
+		for (; !fin.eof(); n++)
+		{
+			std::getline(fin, employee_type);
+		}
+		n--;
+		cout << n << endl;
+		groups = new Human * [n] {};
+
+		for (size_t i = 0; i < n; i++)
+		{
+			std::getline(fin, employee_type, ':');
+			groups[i] = HumanFactory(employee_type);
+			fin >> *groups[i];
+		}
+	}
+	else
+	{
+		std::cerr << "Error: file not found" << endl;
+	}
+
+	for (size_t i = 0; i < n; i++)
+	{
+		cout << *groups[i] << endl;
+	}
 
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete[] group[i];
 	}
+	delete[]group;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
