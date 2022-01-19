@@ -441,7 +441,8 @@ T.print();
 		n--;
 		cout << n << endl;
 		groups = new Human * [n] {};
-
+		fin.clear();
+		fin.seekg(0);
 		for (size_t i = 0; i < n; i++)
 		{
 			std::getline(fin, employee_type, ':');
